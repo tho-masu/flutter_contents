@@ -14,10 +14,10 @@ class PieChartWidget extends StatefulWidget {
 class PieChartState extends State {
   int touchedIndex = -1;
   List<Tuple3<String, String, double>> data = [
-    const Tuple3("stock", "\$", 12),
+    const Tuple3("stock", "\$", 14),
     const Tuple3("bond", "\$", 6),
-    const Tuple3("commodity", "\$", 2),
-    const Tuple3("REIT", "\$", 1)
+    const Tuple3("commodity", "\$", 4),
+    const Tuple3("REIT", "\$", 2)
   ]; //("assetname","currency",amount)
   List<PieChartSectionData> sectionData = [];
   List<Indicator> indicatorData = [];

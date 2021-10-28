@@ -20,6 +20,10 @@ class Indicator extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: <Widget>[
+        const SizedBox(
+          height: 16,
+          width: 5,
+        ),
         Container(
           width: size,
           height: size,
@@ -39,7 +43,7 @@ class Indicator extends StatelessWidget {
         ),
         const SizedBox(
           height: 16,
-          width: 10,
+          width: 5,
         )
       ],
     );
