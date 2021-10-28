@@ -16,7 +16,8 @@ class PieChartState extends State {
   List<Tuple3<String, String, double>> data = [
     const Tuple3("stock", "\$", 12),
     const Tuple3("bond", "\$", 6),
-    const Tuple3("commodity", "\$", 2)
+    const Tuple3("commodity", "\$", 2),
+    const Tuple3("REIT", "\$", 1)
   ]; //("assetname","currency",amount)
   List<PieChartSectionData> sectionData = [];
   List<Indicator> indicatorData = [];
@@ -27,74 +28,45 @@ class PieChartState extends State {
     data.forEach((tuple) => sum += tuple.item3);
     data.forEach((tuple) {
       sectionData.add(generateSectionData(
-          "${tuple.item1}\n${100 * tuple.item3 / sum}%", tuple.item3));
+          "${tuple.item1}\n${(100 * tuple.item3 / sum).toStringAsFixed(1)}%",
+          tuple.item3));
       indicatorData
           .add(generateIndicator(tuple.item1, tuple.item2, tuple.item3));
     });
 
-    return AspectRatio(
-      aspectRatio: 1.3,
-      child: Card(
-        color: Colors.white,
-        child: Row(
-          children: <Widget>[
-            const SizedBox(
-              height: 18,
-            ),
-            Expanded(
-              child: AspectRatio(
-                aspectRatio: 0.5,
-                child: PieChart(
-                  PieChartData(
-                      pieTouchData: PieTouchData(touchCallback:
-                          (FlTouchEvent event, pieTouchResponse) {
-                        setState(() {
-                          if (!event.isInterestedForInteractions ||
-                              pieTouchResponse == null ||
-                              pieTouchResponse.touchedSection == null) {
-                            touchedIndex = -1;
-                            return;
-                          }
-                          touchedIndex = pieTouchResponse
-                              .touchedSection!.touchedSectionIndex;
-                        });
-                      }),
-                      borderData: FlBorderData(
-                        show: false,
-                      ),
-                      sectionsSpace: 2,
-                      startDegreeOffset: 270,
-                      centerSpaceRadius: 40,
-                      sections: showingSections()),
-                ),
+    return Card(
+        child: Column(children: <Widget>[
+      AspectRatio(
+        aspectRatio: 1.3,
+        child: PieChart(
+          PieChartData(
+              pieTouchData: PieTouchData(
+                  touchCallback: (FlTouchEvent event, pieTouchResponse) {
+                setState(() {
+                  if (!event.isInterestedForInteractions ||
+                      pieTouchResponse == null ||
+                      pieTouchResponse.touchedSection == null) {
+                    touchedIndex = -1;
+                    return;
+                  }
+                  touchedIndex =
+                      pieTouchResponse.touchedSection!.touchedSectionIndex;
+                });
+              }),
+              borderData: FlBorderData(
+                show: false,
               ),
-            ),
-            Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                indicatorData[0],
-                const SizedBox(
-                  height: 4,
-                ),
-                indicatorData[1],
-                const SizedBox(
-                  height: 4,
-                ),
-                indicatorData[2],
-                const SizedBox(
-                  height: 18,
-                ),
-              ],
-            ),
-            const SizedBox(
-              width: 28,
-            ),
-          ],
+              sectionsSpace: 2,
+              startDegreeOffset: 270,
+              centerSpaceRadius: 40,
+              sections: showingSections()),
         ),
       ),
-    );
+      Wrap(children: showingIndicators()),
+      const SizedBox(
+        height: 15,
+      ),
+    ]));
   }
 
   List<PieChartSectionData> showingSections() {
@@ -104,6 +76,14 @@ class PieChartState extends State {
 
       return sectionData[i].copyWith(radius: radius);
     });
+  }
+
+  List<Widget> showingIndicators() {
+    List<Widget> lst = [];
+    for (int i = 0; i < data.length; i++) {
+      lst.add(indicatorData[i]);
+    }
+    return lst;
   }
 
   PieChartSectionData generateSectionData(String title, double value) {
