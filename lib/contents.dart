@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_contents/assetlist/asset_list_page.dart';
-import 'package:flutter_contents/piechart/index.dart';
-import 'web/webview.dart';
+import 'popup/popup.dart';
+import 'assetlist/asset_list_page.dart';
+import 'piechart/index.dart';
+import 'web/webview2.dart';
 
 class ContentsPage extends StatefulWidget {
   const ContentsPage({Key? key}) : super(key: key);
@@ -27,7 +28,7 @@ class _ContentsPageState extends State<ContentsPage> {
               // 横幅いっぱいに広げる
               width: double.infinity,
               margin: const EdgeInsets.fromLTRB(0, 20, 0, 20),
-              // キャンセルボタン
+              // 銘柄リストボタン
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   primary: Colors.blue,
@@ -48,7 +49,7 @@ class _ContentsPageState extends State<ContentsPage> {
               // 横幅いっぱいに広げる
               width: double.infinity,
               margin: const EdgeInsets.fromLTRB(0, 20, 0, 20),
-              // リスト追加ボタン
+              // パイチャートボタン
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   primary: Colors.blue,
@@ -65,6 +66,12 @@ class _ContentsPageState extends State<ContentsPage> {
                     style: TextStyle(color: Colors.white)),
               ),
             ),
+            Container(
+                // 横幅いっぱいに広げる
+                width: double.infinity,
+                margin: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+                // アラートボタン
+                child: Alert()),
             Container(
               // 横幅いっぱいに広げる
               width: double.infinity,
@@ -86,12 +93,12 @@ class _ContentsPageState extends State<ContentsPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.ac_unit_outlined),
+        child: const Icon(Icons.web),
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute<WebViewExample>(
-              builder: (BuildContext _context) => WebViewExample(),
+            MaterialPageRoute<WebViewScreen>(
+              builder: (BuildContext _context) => WebViewScreen(),
             ),
           );
         },

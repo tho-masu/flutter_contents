@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_contents/piechart/indicator.dart';
+import 'indicator.dart';
 import 'package:tuple/tuple.dart';
 
 class PieChartWidget extends StatefulWidget {

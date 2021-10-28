@@ -1,67 +1,52 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
-import 'dart:io';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'dart:io';
 
-class WebViewExample extends StatefulWidget {
+//このモジュールを用いるときは
+//android/app/src/main/AndroidManifest.xmlの最後の</manifest>の前に
+//    <queries>
+//        <intent>
+//            <action android:name="android.intent.action.VIEW" />
+//            <data android:scheme="https" />
+//        </intent>
+//        <intent>
+//            <action android:name="android.intent.action.DIAL" />
+//            <data android:scheme="tel" />
+//        </intent>
+//        <intent>
+//            <action android:name="android.intent.action.SEND" />
+//            <data android:mimeType="*/*" />
+//        </intent>
+//    </queries>
+//を挿入する必要があることに注意
+
+class WebScreen extends StatefulWidget {
+  const WebScreen({Key? key}) : super(key: key);
+
   @override
-  _WebViewExampleState createState() => _WebViewExampleState();
+  _WebScreenState createState() => _WebScreenState();
 }
 
-class _WebViewExampleState extends State<WebViewExample> {
-  final Completer<WebViewController> _controller =
-      Completer<WebViewController>();
-
+class _WebScreenState extends State<WebScreen> {
   @override
   void initState() {
     super.initState();
-    if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
+    if (Platform.isAndroid) {
+      WebView.platform = SurfaceAndroidWebView();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Builder(builder: (BuildContext context) {
-        return WebView(
-          initialUrl: 'https://flutter.dev',
-          javascriptMode: JavascriptMode.unrestricted,
-          onWebViewCreated: (WebViewController webViewController) {
-            _controller.complete(webViewController);
-          },
-          onProgress: (int progress) {
-            print("WebView is loading (progress : $progress%)");
-          },
-          javascriptChannels: <JavascriptChannel>{
-            _toasterJavascriptChannel(context),
-          },
-          navigationDelegate: (NavigationRequest request) {
-            if (request.url.startsWith('https://www.youtube.com/')) {
-              print('blocking navigation to $request}');
-              return NavigationDecision.prevent;
-            }
-            print('allowing navigation to $request');
-            return NavigationDecision.navigate;
-          },
-          onPageStarted: (String url) {
-            print('Page started loading: $url');
-          },
-          onPageFinished: (String url) {
-            print('Page finished loading: $url');
-          },
-          gestureNavigationEnabled: true,
-        );
-      }),
+      appBar: AppBar(
+        title: const Text('コンテンツ'),
+      ),
+      body: const Center(
+        child: WebView(
+          initialUrl: "https://www.google.com/",
+        ),
+      ),
     );
-  }
-
-  JavascriptChannel _toasterJavascriptChannel(BuildContext context) {
-    return JavascriptChannel(
-        name: 'Toaster',
-        onMessageReceived: (JavascriptMessage message) {
-          // ignore: deprecated_member_use
-          Scaffold.of(context).showSnackBar(
-            SnackBar(content: Text(message.message)),
-          );
-        });
   }
 }

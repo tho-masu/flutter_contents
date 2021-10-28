@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_contents/contents.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'contents.dart';
+import 'web/launch_url.dart';
 
 void main() {
   runApp(const MyApp());
@@ -45,6 +45,7 @@ class _LoginPageState extends State<LoginPage> {
   final _userController = TextEditingController();
   final _passwordController = TextEditingController();
   String _text = '';
+  final String url = 'https://flutter.dev/';
 
   @override
   Widget build(BuildContext context) {
@@ -109,14 +110,9 @@ class _LoginPageState extends State<LoginPage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add_chart),
-        onPressed: () async {
-          String url = 'https://flutter.dev/';
-          await canLaunch(url)
-              ? await launch(url)
-              : throw 'Could not launch $url';
-        },
+      floatingActionButton: const FloatingActionButton(
+        child: Icon(Icons.open_in_browser),
+        onPressed: launchURL,
       ),
     );
   }
